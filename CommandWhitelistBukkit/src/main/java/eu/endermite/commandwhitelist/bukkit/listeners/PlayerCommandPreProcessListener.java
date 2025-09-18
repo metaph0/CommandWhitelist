@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.HashSet;
+import java.util.Locale;
 
 public class PlayerCommandPreProcessListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
@@ -52,6 +53,15 @@ public class PlayerCommandPreProcessListener implements Listener {
                 event.setCancelled(true);
                 audiences.player(player).sendMessage(CWCommand.miniMessage.deserialize(config.prefix + config.subcommand_denied));
                 return;
+            }
+        }
+
+        if (!event.isCancelled()) {
+            String[] commandParts = event.getMessage().split(" ", 2);
+            if (commandParts.length > 1) {
+                event.setMessage(commandParts[0].toLowerCase(Locale.ROOT) + " " + commandParts[1]);
+            } else {
+                event.setMessage(event.getMessage().toLowerCase(Locale.ROOT));
             }
         }
 
